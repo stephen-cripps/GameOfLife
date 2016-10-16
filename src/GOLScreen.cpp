@@ -15,7 +15,10 @@ GOLScreen::GOLScreen() :
 
 }
 
-bool GOLScreen::init(int SCREEN_WIDTH, int SCREEN_HEIGHT) {
+bool GOLScreen::init(int W, int H) {
+
+	SCREEN_WIDTH = W;
+	SCREEN_HEIGHT = H;
 
 	//Check, initialisation
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -57,9 +60,8 @@ bool GOLScreen::init(int SCREEN_WIDTH, int SCREEN_HEIGHT) {
 }
 
 void GOLScreen::setPixel(int x, int y, Uint32 colour) {
-	cout << "setpixelstart" << endl;
+
 	m_buffer[(y * SCREEN_WIDTH) + x] = colour;
-	cout << "setpixelend" << endl;
 }
 
 void GOLScreen::update() {
