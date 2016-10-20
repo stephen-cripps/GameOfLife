@@ -8,12 +8,15 @@
 #ifndef GOLSWARM_H_
 #define GOLSWARM_H_
 #include "GOLGrid.h"
+#include <vector>
 
 class GOLSwarm {
 private:
-	GOLGrid *m_pGrid;
+	std::vector< std::vector<bool> > grid;
+	std::vector< std::vector<bool> > temp;
 	int SCREEN_WIDTH;
 	int SCREEN_HEIGHT;
+	double prevElapsed;
 public:
 	GOLSwarm(int p, int W, int H);
 	bool checkLive(int y, int x);

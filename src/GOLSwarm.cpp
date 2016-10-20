@@ -8,35 +8,39 @@
 #include "GOLSwarm.h"
 #include <stdlib.h>
 #include <iostream>
-using namespace std; //for cout debug
+#include <conio.h>
+#include <windows.h>
+#include <unistd.h>
+using namespace std;
+//for cout debug
 
-GOLSwarm::GOLSwarm(int p, int W, int H) {
+GOLSwarm::GOLSwarm(int p, int W, int H) :
+	prevElapsed(0) {
 	SCREEN_WIDTH = W;
 	SCREEN_HEIGHT = H;
-	m_pGrid = new GOLGrid[W * H]; //new game grid size of window
-	int count = 0;
-	for (int i = 0; i < W * H; i++) { //sets number of alive cells based on probability
+	grid.resize(H, vector<bool> (W, 0)); //new game grid size of window
 
-		double rNum = ((double) rand() / (RAND_MAX)) * 100;
+	for (int y = 0; y < SCREEN_HEIGHT; y++) {
+		for (int x = 0; x < SCREEN_WIDTH; x++) { //sets number of alive cells based on probability
 
-		if (rNum < p) {
-			m_pGrid[i].setStatus(3);
-			count ++;
+			double rNum = ((double) rand() / (RAND_MAX)) * 100;
 
+			if (rNum < p) {
+				grid[y][x] = 1;
+
+			}
 		}
 	}
 
 }
 
 bool GOLSwarm::checkLive(int x, int y) {
-	int i = y * SCREEN_WIDTH + x; //converts cell coords to position in array
 
-	bool status = m_pGrid[i].checkStatus();
-
-	return status;
+	return grid[y][x];
 }
 
 void GOLSwarm::nextGen() {
+	temp = grid;
 	for (int y = 0; y < SCREEN_HEIGHT; y++) {
 		for (int x = 0; x < SCREEN_WIDTH; x++) { // for every cell{
 			int count = 0; //count of live neighbours
@@ -50,22 +54,27 @@ void GOLSwarm::nextGen() {
 
 						if (currentY >= 0 && currentY < SCREEN_HEIGHT
 								&& currentX >= 0 && currentX < SCREEN_WIDTH) { //off screen = dead (for now)
-							int i = currentY * SCREEN_WIDTH + currentX; //converts cell coords to position in array
 
-							if (m_pGrid[i].checkStatus()) {
+							if (grid[currentY][currentX]) {
 								count++;
+
 							}
 						}
 					}
 				}
 			}
-			int j = y * SCREEN_WIDTH + x;
-			m_pGrid[j].setStatus(count); //sets alive or dead based on no. alive neighbours
+			//sets alive or dead based on no. alive neighbours
+			if (count == 3)
+				temp[y][x] = 1;
+			else if (count < 2 || count > 3)
+				temp[y][x] = 0;
+
 		}
 
 	}
+
+	grid = temp;
 }
 
 GOLSwarm::~GOLSwarm() {
-	delete[] m_pGrid;
 }
