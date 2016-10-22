@@ -9,13 +9,11 @@
 #include <stdlib.h>
 #include <iostream>
 #include <conio.h>
-#include <windows.h>
-#include <unistd.h>
 using namespace std;
 //for cout debug
 
 GOLSwarm::GOLSwarm(int p, int W, int H) :
-	prevElapsed(0) {
+	SCREEN_WIDTH(0), SCREEN_HEIGHT(0), prevElapsed(0) {
 	SCREEN_WIDTH = W;
 	SCREEN_HEIGHT = H;
 	grid.resize(H, vector<bool> (W, 0)); //new game grid size of window

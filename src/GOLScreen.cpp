@@ -11,7 +11,7 @@
 using namespace std;
 
 GOLScreen::GOLScreen() :
-	m_window(NULL), m_renderer(NULL), m_texture(NULL), m_buffer(NULL) {
+	m_window(NULL), m_renderer(NULL), m_texture(NULL), m_buffer(NULL), SCREEN_WIDTH(0), SCREEN_HEIGHT(0) {
 
 }
 

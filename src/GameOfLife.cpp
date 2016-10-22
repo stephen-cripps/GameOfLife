@@ -10,7 +10,6 @@
 #include <SDL.h>
 #include "GOLScreen.h"
 #include "GOLSwarm.h"
-#include "GOLGrid.h"
 #include<time.h>
 using namespace std;
 

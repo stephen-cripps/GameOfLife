@@ -7,7 +7,6 @@
 
 #ifndef GOLSWARM_H_
 #define GOLSWARM_H_
-#include "GOLGrid.h"
 #include <vector>
 
 class GOLSwarm {
