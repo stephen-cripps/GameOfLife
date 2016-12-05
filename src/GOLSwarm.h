@@ -13,12 +13,13 @@ class GOLSwarm {
 private:
 	std::vector< std::vector<bool> > grid;
 	std::vector< std::vector<bool> > temp;
-	int SCREEN_WIDTH;
-	int SCREEN_HEIGHT;
+	int GRID_WIDTH;
+	int GRID_HEIGHT;
 	double prevElapsed;
 public:
 	GOLSwarm(int p, int W, int H);
-	bool checkLive(int y, int x);
+	bool checkLive(int x, int y);
+	bool makeLive(int x, int y);
 	void nextGen();
 	virtual ~GOLSwarm();
 };

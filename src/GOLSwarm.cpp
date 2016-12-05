@@ -10,16 +10,16 @@
 #include <iostream>
 #include <conio.h>
 using namespace std;
-//for cout debug
+
 
 GOLSwarm::GOLSwarm(int p, int W, int H) :
-	SCREEN_WIDTH(0), SCREEN_HEIGHT(0), prevElapsed(0) {
-	SCREEN_WIDTH = W;
-	SCREEN_HEIGHT = H;
+	GRID_WIDTH(0), GRID_HEIGHT(0), prevElapsed(0) {
+	GRID_WIDTH = W;
+	GRID_HEIGHT = H;
 	grid.resize(H, vector<bool> (W, 0)); //new game grid size of window
 
-	for (int y = 0; y < SCREEN_HEIGHT; y++) {
-		for (int x = 0; x < SCREEN_WIDTH; x++) { //sets number of alive cells based on probability
+	for (int y = 0; y < GRID_HEIGHT; y++) {
+		for (int x = 0; x < GRID_WIDTH; x++) { //sets number of alive cells based on probability
 
 			double rNum = ((double) rand() / (RAND_MAX)) * 100;
 
@@ -37,10 +37,16 @@ bool GOLSwarm::checkLive(int x, int y) {
 	return grid[y][x];
 }
 
+bool GOLSwarm::makeLive(int x, int y){
+	grid [y][x] = !grid[y][x];
+
+	return grid[y][x];
+}
+
 void GOLSwarm::nextGen() {
 	temp = grid;
-	for (int y = 0; y < SCREEN_HEIGHT; y++) {
-		for (int x = 0; x < SCREEN_WIDTH; x++) { // for every cell{
+	for (int y = 0; y < GRID_HEIGHT; y++) {
+		for (int x = 0; x < GRID_WIDTH; x++) { // for every cell{
 			int count = 0; //count of live neighbours
 
 			for (int row = -1; row <= 1; row++) {
@@ -50,8 +56,8 @@ void GOLSwarm::nextGen() {
 						int currentX = x + col;
 						int currentY = y + row;
 
-						if (currentY >= 0 && currentY < SCREEN_HEIGHT
-								&& currentX >= 0 && currentX < SCREEN_WIDTH) { //off screen = dead (for now)
+						if (currentY >= 0 && currentY < GRID_HEIGHT
+								&& currentX >= 0 && currentX < GRID_WIDTH) { //off screen = dead (for now)
 
 							if (grid[currentY][currentX]) {
 								count++;

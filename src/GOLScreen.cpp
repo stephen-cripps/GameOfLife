@@ -6,21 +6,23 @@
  */
 
 #include "GOLScreen.h"
+#include "GOLSwarm.h"
 #include <iostream>
-
 using namespace std;
 
 GOLScreen::GOLScreen() :
-	m_window(NULL), m_renderer(NULL), m_texture(NULL), m_buffer(NULL), SCREEN_WIDTH(0), SCREEN_HEIGHT(0) {
+	m_window(NULL), m_renderer(NULL), m_texture(NULL), m_buffer(NULL),
+			SCREEN_WIDTH(0), SCREEN_HEIGHT(0) {
 
 }
 
-bool GOLScreen::init(int W, int H) {
-
-	SCREEN_WIDTH = W;
-	SCREEN_HEIGHT = H;
+bool GOLScreen::init(int W, int H, int C) {
+	CELL_SIZE = C;
+	SCREEN_WIDTH = W * C;
+	SCREEN_HEIGHT = H * C;
 
 	//Check, initialisation
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		return false;
 	}
@@ -51,7 +53,6 @@ bool GOLScreen::init(int W, int H) {
 	//Create buffer array, allocating space for each pixel
 	m_buffer = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT];
 
-
 	//set initial buffer value
 	memset(m_buffer, 0, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
 
@@ -61,7 +62,11 @@ bool GOLScreen::init(int W, int H) {
 
 void GOLScreen::setPixel(int x, int y, Uint32 colour) {
 
-	m_buffer[(y * SCREEN_WIDTH) + x] = colour;
+	for (int i = y * CELL_SIZE; i < (y + 1) * CELL_SIZE; i++) {
+		for (int j = x * CELL_SIZE; j < (x + 1) * CELL_SIZE; j++) { //for every pixel in cell
+			m_buffer[(i * SCREEN_WIDTH) + j] = colour; //colour
+		}
+	}
 }
 
 void GOLScreen::update() {
@@ -72,26 +77,56 @@ void GOLScreen::update() {
 	SDL_RenderPresent(m_renderer);
 }
 
-bool GOLScreen::processEvents() {
+int GOLScreen::processEvents() {
 	SDL_Event event;
-
+	int out = 0;
 	//Check for events and execute
 	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
-			return false;
+		switch (event . type) {
+
+		case SDL_QUIT: // if x is pressed
+			out = 1;
+			break;
+		case SDL_KEYDOWN: // if space is pressed
+			if (event.key.keysym.sym == SDLK_SPACE)
+				out = 2;
+			break;
+		case SDL_MOUSEBUTTONDOWN: {
+			Cx = event.button.x; //Set x and y coords to be accessed outside of this scope
+			Cy = event.button.y;
+			out = 3;
+			break;
+			case SDL_MOUSEMOTION:
+			//if mose moves...
+			if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)) { //...while left button is held down
+				Cx = event.button.x;
+				Cy = event.button.y;
+				out = 3;
+				break;
+			}
+		}
 		}
 	}
-	return true;
+	return out;
+}
+
+int GOLScreen::getX() {
+
+	return Cx;
+}
+int GOLScreen::getY() {
+
+	return Cy;
 }
 
 void GOLScreen::close() {
-		delete[] &m_buffer;
-		SDL_DestroyTexture(m_texture);
-		SDL_DestroyRenderer(m_renderer);
-		SDL_DestroyWindow(m_window);
-		SDL_Quit();
+	delete[] &m_buffer;
+	SDL_DestroyTexture(m_texture);
+	SDL_DestroyRenderer(m_renderer);
+	SDL_DestroyWindow(m_window);
+	SDL_Quit();
 
-	}
+}
 
 GOLScreen::~GOLScreen() {
 	// TODO Auto-generated destructor stub

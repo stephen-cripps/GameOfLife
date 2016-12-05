@@ -18,14 +18,21 @@ private:
 	Uint32 *m_buffer;
 	int SCREEN_WIDTH;
 	int SCREEN_HEIGHT;
+	int CELL_SIZE;
+	int Cx;
+	int Cy;
+
+
 
 public:
 	GOLScreen();
-	bool init(int SCREEN_WIDTH, int SCREEN_HEIGHT);
+	bool init(int SCREEN_WIDTH, int SCREEN_HEIGHT, int CELL_SIZE);
 	void setPixel(int x, int y, Uint32 colour);
 	void update();
-	bool processEvents();
+	int processEvents();
 	void close();
+	int getX();
+	int getY();
 
 	virtual ~GOLScreen();
 };
