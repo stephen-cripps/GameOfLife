@@ -28,8 +28,6 @@ int main(int argc, char* argv[]) {
 	//screen resolution
 	DWORD dwWidth = GetSystemMetrics(SM_CXSCREEN);
 	DWORD dwHeight = GetSystemMetrics(SM_CYSCREEN);
-	cout << dwWidth << endl;
-	cout << dwHeight << endl;
 
 	//initialising width
 	Width_set: cout << "Enter grid width: ";
@@ -42,39 +40,35 @@ int main(int argc, char* argv[]) {
 	}
 
 	// initialising screen height
-	Height_set:
-	cout << "Enter grid height: ";
+	Height_set: cout << "Enter grid height: ";
 	cin >> GRID_HEIGHT;
-		fflush(stdin);
-		if (cin.fail()) {
-			cout << "\n \n **Invalid input; please re-enter** \n" << endl;
-			std::cin.clear();
-			goto Height_set;
-		}
+	fflush(stdin);
+	if (cin.fail()) {
+		cout << "\n \n **Invalid input; please re-enter** \n" << endl;
+		std::cin.clear();
+		goto Height_set;
+	}
 
-	Cell_set:
-	cout << "Enter Cell size in Pixels: ";
+	Cell_set: cout << "Enter Cell size in Pixels: ";
 	cin >> CELL_SIZE;
-		fflush(stdin);
-		if (cin.fail()) {
-			cout << "\n \n **Invalid input; please re-enter** \n" << endl;
-			std::cin.clear();
-			goto Cell_set;
-		}
+	fflush(stdin);
+	if (cin.fail()) {
+		cout << "\n \n **Invalid input; please re-enter** \n" << endl;
+		std::cin.clear();
+		goto Cell_set;
+	}
 
 	if (GRID_HEIGHT * CELL_SIZE < 100 || GRID_WIDTH * CELL_SIZE < 100) {
 		cout << "Please ensure window is larger than 100x100 pixels" << endl;
 		goto Width_set;
-	}else if(GRID_HEIGHT * CELL_SIZE > dwHeight || GRID_WIDTH * CELL_SIZE > dwWidth){
-		cout << "Please ensure window is smaller than your screen resolution (" << dwWidth << "x" << dwHeight << ")" << endl;
+	} else if (GRID_HEIGHT * CELL_SIZE > dwHeight || GRID_WIDTH * CELL_SIZE
+			> dwWidth) {
+		cout << "Please ensure window is smaller than your screen resolution ("
+				<< dwWidth << "x" << dwHeight << ")" << endl;
 		goto Width_set;
 	}
 
-	GOLScreen screen;
-	if (!screen.init(GRID_WIDTH, GRID_HEIGHT, CELL_SIZE)) {
-		cout << "screen initialisation failed" << endl;
-		return 0;
-	}
+
 	int pAlive = 200;
 	while (pAlive < 0 || pAlive > 100) {// initialising alive cells
 		cout << "Enter the percentage of cells initially alive: " << endl;
@@ -85,6 +79,12 @@ int main(int argc, char* argv[]) {
 	cin >> speed;
 
 	cout << "Press space to pause, click to create/kill cells" << endl;
+
+	GOLScreen screen;
+	if (!screen.init(GRID_WIDTH, GRID_HEIGHT, CELL_SIZE)) {
+		cout << "screen initialisation failed" << endl;
+		return 0;
+	}
 
 	GOLSwarm swarm(pAlive, GRID_WIDTH, GRID_HEIGHT); // initialise swarm;
 
